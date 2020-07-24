@@ -10,8 +10,37 @@ public class AudioManager : MonoBehaviour
 {
     public List<Music> MusicList;
     public AudioSource audioContainer;
-    public int musIndex = 0;
-    public Music currentMusic;
+
+    private int _musicIndex;
+    public int musicIndex 
+    {
+        get { return _musicIndex; }
+        set 
+        {
+            if (value != _musicIndex)
+            {
+                if (value > MusicList.Count - 1)
+                {
+                    _musicIndex = 0;
+                }
+                else if (value < 0)
+                {
+                    _musicIndex = MusicList.Count - 1;
+                }
+                else
+                {
+                    _musicIndex = value;
+                }
+
+                if (MusicList.Count != 0)
+                {
+                    SetMusicText();
+                    audioContainer.clip = currentMusic.clip;
+                }
+            }
+        } 
+    }
+    public Music currentMusic { get { return MusicList[_musicIndex]; } }
     public Canvas MusicPlayerCanvas;
 
     public bool isStopped = false;
@@ -28,7 +57,7 @@ public class AudioManager : MonoBehaviour
         if (audioContainer.clip == null)
             audioContainer.clip = MusicList[MusicList.Count - 1].clip;
     }
-    public void SetMusicText() 
+    public void SetMusicText()// доставать автора название и тд из файла
     {
         MusicPlayerCanvas.transform.Find("CurrentMusicName").gameObject.GetComponent<Text>().text = currentMusic.name;
     }
@@ -49,21 +78,17 @@ public class AudioManager : MonoBehaviour
     }
     public void Prev() 
     {
-        musIndex--;
+        musicIndex--;
     }
     public void Next() 
     {
-        musIndex++;
+        musicIndex++;
     }
     public void Play()
     {
 
         audioContainer.Play();
         isStopped = false;
-    }
-    public void SetMusic(Music music) 
-    {
-        currentMusic = music;
     }
     public void MusicDropdown(int ind) 
     {
@@ -86,24 +111,9 @@ public class AudioManager : MonoBehaviour
     }
     public void Update()
     {
-        if (musIndex > MusicList.Count - 1)
+        if (audioContainer.time >= audioContainer.clip.length - 0.1) 
         {
-            musIndex = 0;
-        }
-        else if (musIndex < 0) 
-        {
-            musIndex = MusicList.Count - 1;
-        }
-        if (MusicList.Count != 0)
-        {
-            SetMusic(MusicList[musIndex]);
-            SetMusicText();
-            audioContainer.clip = currentMusic.clip;
-            if (audioContainer.time >= audioContainer.clip.length - 0.1) 
-            {
-                musIndex++;
-
-            }
+            musicIndex++;
         }
         if (!isStopped)
         {

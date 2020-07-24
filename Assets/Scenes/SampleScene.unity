@@ -822,7 +822,7 @@ GameObject:
   - component: {fileID: 978963766}
   - component: {fileID: 978963765}
   m_Layer: 5
-  m_Name: Dropdown
+  m_Name: MusicDropdown
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -847,7 +847,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 322, y: -15}
+  m_AnchoredPosition: {x: 261, y: -15}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &978963765
