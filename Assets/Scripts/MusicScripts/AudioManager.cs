@@ -1,15 +1,14 @@
-﻿using System.Collections;
-using System.Linq;
-using System.IO;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using GlobExpressions;
 
 public class AudioManager : MonoBehaviour
 {
-    public List<Music> MusicList = MusicLoader.musicList;
-    public AudioSource audioContainer;
+    public Text MusicText;
+    public Dropdown MusicDropdown;
+
+    private List<Music> MusicList = MusicLoader.musicList;
+    private AudioSource audioContainer;
 
     private int _musicIndex;
     public int musicIndex 
@@ -45,17 +44,16 @@ public class AudioManager : MonoBehaviour
 
     public void SetMusicText()// доставать автора название и тд из файла
     {
-        MusicPlayerCanvas.transform.Find("CurrentMusicName").gameObject.GetComponent<Text>().text = currentMusic.name;
+        MusicText.text = currentMusic.name;
     }
     public void SetDropDown() 
     {
-        Dropdown MusDropdown = MusicPlayerCanvas.transform.Find("MusicDropdown").gameObject.GetComponent<Dropdown>();
         List<string> musicNameList = new List<string>();
         foreach (Music mus in MusicList) 
         {
             musicNameList.Add(mus.name);
         }
-        MusDropdown.AddOptions(musicNameList);
+        MusicDropdown.AddOptions(musicNameList);
     }
     public void Stop() 
     {
@@ -72,10 +70,6 @@ public class AudioManager : MonoBehaviour
     public void Play()
     {
         audioContainer.Play();
-    }
-    public void MusicDropdown(int ind) 
-    {
-
     }
     public void Start()
     {
