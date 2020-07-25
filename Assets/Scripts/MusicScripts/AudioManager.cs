@@ -43,7 +43,6 @@ public class AudioManager : MonoBehaviour
     public Music currentMusic { get { return MusicList[_musicIndex]; } }
     public Canvas MusicPlayerCanvas;
 
-    public bool isStopped = false;
     public string musicFolderPath;
     string[] matchingFiles;
 
@@ -55,7 +54,8 @@ public class AudioManager : MonoBehaviour
 
         MusicList.Add(new Music { clip = URL.GetAudioClip(false, true), name = Path.GetFileName(path) });
         if (audioContainer.clip == null)
-            audioContainer.clip = MusicList[MusicList.Count - 1].clip;
+             musicIndex++;
+
     }
     public void SetMusicText()// доставать автора название и тд из файла
     {
@@ -74,7 +74,6 @@ public class AudioManager : MonoBehaviour
     public void Stop() 
     {
         audioContainer.Pause();
-        isStopped = true;
     }
     public void Prev() 
     {
@@ -86,9 +85,7 @@ public class AudioManager : MonoBehaviour
     }
     public void Play()
     {
-
         audioContainer.Play();
-        isStopped = false;
     }
     public void MusicDropdown(int ind) 
     {
@@ -111,12 +108,9 @@ public class AudioManager : MonoBehaviour
     }
     public void Update()
     {
-        if (audioContainer.time >= audioContainer.clip.length - 0.1) 
+        if (audioContainer.clip != null && audioContainer.time >= audioContainer.clip.length - 0.1) 
         {
             musicIndex++;
-        }
-        if (!isStopped)
-        {
         }
     }
 
