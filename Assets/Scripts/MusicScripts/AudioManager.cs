@@ -8,7 +8,7 @@ using GlobExpressions;
 
 public class AudioManager : MonoBehaviour
 {
-    public List<Music> MusicList;
+    public List<Music> MusicList = MusicLoader.musicList;
     public AudioSource audioContainer;
 
     private int _musicIndex;
@@ -43,20 +43,6 @@ public class AudioManager : MonoBehaviour
     public Music currentMusic { get { return MusicList[_musicIndex]; } }
     public Canvas MusicPlayerCanvas;
 
-    public string musicFolderPath;
-    string[] matchingFiles;
-
-    IEnumerator LoadAudio(string path)
-    {
-        path = "file://" + path;
-        WWW URL = new WWW(path);
-        yield return URL;
-
-        MusicList.Add(new Music { clip = URL.GetAudioClip(false, true), name = Path.GetFileName(path) });
-        if (audioContainer.clip == null)
-             musicIndex++;
-
-    }
     public void SetMusicText()// доставать автора название и тд из файла
     {
         MusicPlayerCanvas.transform.Find("CurrentMusicName").gameObject.GetComponent<Text>().text = currentMusic.name;
@@ -93,14 +79,9 @@ public class AudioManager : MonoBehaviour
     }
     public void Start()
     {
-        musicFolderPath = musicFolderPath.Replace('\\', '/');
+        MusicLoader.songLoaded.AddListener(Next);
         audioContainer = gameObject.GetComponent<AudioSource>();
-        matchingFiles = Glob.Files($"{musicFolderPath}", "*.wav").ToArray();
 
-        foreach (string path in matchingFiles)
-        {
-            StartCoroutine(LoadAudio(musicFolderPath + "/" + path));
-        }
         if (MusicList.Count != 0)
         {
             SetDropDown();
