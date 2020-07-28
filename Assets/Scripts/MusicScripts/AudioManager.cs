@@ -1,13 +1,14 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 public class AudioManager : MonoBehaviour
 {
     public Text MusicText;
     public Dropdown MusicDropdown;
-
-    private List<Music> MusicList = MusicLoader.musicList;
+    public Animation PopupAnim;
+    public List<Music> MusicList = MusicLoader.musicList;
     private AudioSource audioContainer;
 
     private int _musicIndex;
@@ -33,7 +34,7 @@ public class AudioManager : MonoBehaviour
 
                 if (MusicList.Count != 0)
                 {
-                    SetMusicText();
+                    OnMusicChange.Invoke();
                     audioContainer.clip = currentMusic.clip;
                 }
             }
@@ -41,20 +42,25 @@ public class AudioManager : MonoBehaviour
     }
     public Music currentMusic { get { return MusicList[_musicIndex]; } }
     public Canvas MusicPlayerCanvas;
+    public UnityEvent OnMusicChange = new UnityEvent();
 
-    public void SetMusicText()// доставать автора название и тд из файла
+    public void SetMusicText()
     {
         MusicText.text = currentMusic.name;
     }
-    public void SetDropDown() 
-    {
-        List<string> musicNameList = new List<string>();
-        foreach (Music mus in MusicList) 
-        {
-            musicNameList.Add(mus.name);
-        }
-        MusicDropdown.AddOptions(musicNameList);
-    }
+    //public void SetDropDown() 
+    //{
+    //    List<string> musicNameList = new List<string>();
+    //    foreach (Music mus in MusicList) 
+    //    {
+    //        musicNameList.Add(mus.name);
+    //    }
+    //    MusicDropdown.AddOptions(musicNameList);
+    //}
+    //public void DropdownMusicChange(int ind) 
+    //{
+    //    musicIndex = ind;
+    //}
     public void Stop() 
     {
         audioContainer.Pause();
@@ -75,10 +81,8 @@ public class AudioManager : MonoBehaviour
     {
         MusicLoader.songLoaded.AddListener(Next);
         audioContainer = gameObject.GetComponent<AudioSource>();
-
         if (MusicList.Count != 0)
         {
-            SetDropDown();
         }
     }
     public void Update()
